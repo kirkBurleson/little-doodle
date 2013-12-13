@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html data-ng-app>
+<head lang="en">
+	<meta charset="utf-8">
+	<title>Whiteboard v1.0</title>
+
+	<link href="css/whiteboard.css" rel="stylesheet">
+</head>
+<body data-ng-controller="whiteboardController" data-ng-init="init()">
+  <div id="mainContent">
+
+    <div id="tools">
+      <div data-ng-class="getCurrentToolCss('path')">
+        <img src="images/pencil.png" data-ng-click="selectTool('path')"></div>
+      <div data-ng-class="getCurrentToolCss('text')">
+        <img src="images/text.png" data-ng-click="selectTool('text')"></div>
+      <div data-ng-class="getCurrentToolCss('highlighter')">
+        <img src="images/highlighter.png" data-ng-click="selectTool('highlighter')"></div>
+      <div data-ng-class="getCurrentToolCss('background')">
+        <img src="images/background.png" data-ng-click="selectTool('background')"></div>
+      <div data-ng-class="getCurrentToolCss('square')">
+        <img src="images/square.png" data-ng-click="selectTool('square')"></div>
+      <div data-ng-class="getCurrentToolCss('circle')">
+        <img src="images/circle.png" data-ng-click="selectTool('circle')"></div>
+    </div>
+    
+    <canvas id="canvas" height="512px" width="512px"></canvas>
+    
+    <br>
+    
+    <div id="pencilOptions" data-ng-show="isToolNameSelected('path')">
+      <div data-ng-class="getSelectedColorCss()"></div>    
+      <div id="colors">
+        <div class="colorBlock color1" data-choice data-ng-click="selectColor('1')"></div>
+        <div class="colorBlock color2" data-choice data-ng-click="selectColor('2')"></div>
+        <div class="colorBlock color3" data-choice data-ng-click="selectColor('3')"></div>
+        <div class="colorBlock color4" data-choice data-ng-click="selectColor('4')"></div>
+        <div class="colorBlock color5" data-choice data-ng-click="selectColor('5')"></div>
+        <div class="colorBlock color6" data-choice data-ng-click="selectColor('6')"></div>
+        <div class="colorBlock color7" data-choice data-ng-click="selectColor('7')"></div>
+        <div class="colorBlock color8" data-choice data-ng-click="selectColor('8')"></div>
+        <div class="colorBlock color9" data-choice data-ng-click="selectColor('9')"></div>
+      </div>    
+      <div id="penwidth">
+        Pen Width
+        <input type="text" maxlength="2" data-ng-model="penWidth">
+      </div>
+    </div>
+
+
+  </div>
+
+	<script src="jquery-v2.0.3.min.js"></script>
+	<script src="angular.min.js"></script>  
+  <script src="whiteboardController.js"></script>
+</body>
+</html>
