@@ -1,11 +1,22 @@
 'use strict';
 
 var whiteboardController = function ($scope) {
-	var colors = undefined,
-			canvas = undefined,
-			context = undefined,
+	var colors,
+			colorRgb,
+			canvas,
+			context,
 			currentColorNumber = 1,			
-			selectedToolName = '';
+			selectedToolName = '',
+			render = function (data) {
+				var rect = data.Canvas.getBoundingClientRect();
+				switch (data.ToolName) {
+				case 'path':
+					data.Context.strokeStyle = data.Color;
+					data.Context.fillRect(data.Position.X - rect.left, data.Position.Y - rect.top, $scope.penWidth, $scope.penWidth);
+					
+					break;
+				}
+			};
 
 // bindings
 	$scope.penWidth = 1;
@@ -13,17 +24,47 @@ var whiteboardController = function ($scope) {
 
 // functions
 	$scope.init = function () {
-		colors = ['blank', 'color1', 'color2', 'color3', 'color4', 'color5', 'color6', 'color7', 'color8', 'color9'];
+		colors = [
+			'blank',
+			'color1',
+			'color2',
+			'color3',
+			'color4',
+			'color5',
+			'color6',
+			'color7',
+			'color8',
+			'color9'];
+		colorRgb = [
+			'blank',
+			'#000000',
+			'#ffffff',
+			'#0000ff',
+			'#00ffff',
+			'#ffff00',
+			'#ff0000',
+			'#00ff00',
+			'#ff00ff',
+			'#888888'];
 		
 		canvas = document.getElementById('canvas');
 		context = canvas.getContext('2d');
 
 		canvas.onmousedown = function (e) {
+			var x, y, data;
+
 			if (selectedToolName === '') { return; }
 
+			data = {
+				Canvas: canvas,
+				Context: context,
+				ToolName: selectedToolName,
+				Color: colorRgb[currentColorNumber],
+				Position: {
+					X: e.clientX,
+					Y: e.clientY}}
 
-
-			alert(selectedToolName);
+			render(data);
 		};
 
 	};
@@ -33,8 +74,8 @@ var whiteboardController = function ($scope) {
 	};
 
 	$scope.selectColor = function (color) {
-		$scope.currentColorNumber = color;
-		$scope.currentColorCss = 'currentColor ' + colors[$scope.currentColorNumber];
+		currentColorNumber = color;
+		$scope.currentColorCss = 'currentColor ' + colors[currentColorNumber];
 	};
 
 	$scope.getCurrentToolCss = function (toolName) {
