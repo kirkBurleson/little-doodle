@@ -6,12 +6,12 @@ var whiteboardController = function ($scope) {
 			canvas,
 			context,
 			currentColorNumber = 1,			
-			selectedToolName = '',
+			selectedToolName = 'path',
 			render = function (data) {
 				var rect = data.Canvas.getBoundingClientRect();
 				switch (data.ToolName) {
 				case 'path':
-					data.Context.strokeStyle = data.Color;
+					data.Context.fillStyle = data.Color;
 					data.Context.fillRect(data.Position.X - rect.left, data.Position.Y - rect.top, $scope.penWidth, $scope.penWidth);
 					
 					break;
@@ -19,7 +19,7 @@ var whiteboardController = function ($scope) {
 			};
 
 // bindings
-	$scope.penWidth = 1;
+	$scope.penWidth = 5;
 	$scope.currentColorCss = 'currentColor color1';
 
 // functions
@@ -52,8 +52,6 @@ var whiteboardController = function ($scope) {
 
 		canvas.onmousedown = function (e) {
 			var x, y, data;
-
-			if (selectedToolName === '') { return; }
 
 			data = {
 				Canvas: canvas,
