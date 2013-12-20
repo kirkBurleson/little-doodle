@@ -2,48 +2,59 @@
 
 var whiteboardController = function ($scope) {
 	var colors,
-			colorRgb,
+			colorValue,
 			canvas,
 			context,
 			currentColorNumber = 1,			
 			selectedToolName = 'path',
-			render = function (data) {
-				var rect = data.Canvas.getBoundingClientRect();
-				switch (data.ToolName) {
+
+			createRenderObject = function (x, y) {
+				var data;
+
+				switch (selectedToolName) {
 				case 'path':
-					data.Context.fillStyle = data.Color;
-					data.Context.fillRect(data.Position.X - rect.left, data.Position.Y - rect.top, $scope.penWidth, $scope.penWidth);
-					
+					data = {
+						Canvas: canvas,
+						Context: context,
+						ToolName: 'path',
+						Color: colorValue[currentColorNumber],
+						PenWidth: $scope.penWidth,						
+						Position: {
+							X: x,
+							Y: y}}
 					break;
 				}
+
+				return data;
 			};
 
 // bindings
 	$scope.penWidth = 5;
-	$scope.currentColorCss = 'currentColor color1';
+	$scope.currentColorCss = 'currentColor black';
 
 // functions
 	$scope.init = function () {
 		colors = [
 			'blank',
-			'color1',
-			'color2',
-			'color3',
-			'color4',
-			'color5',
-			'color6',
-			'color7',
-			'color8',
-			'color9'];
-		colorRgb = [
+			'black',
+			'white',
+			'blue',
+			'skyblue',
+			'red',
+			'green',
+			'yellow',
+			'pink',
+			'gray'];
+
+		colorValue = [
 			'blank',
 			'#000000',
 			'#ffffff',
 			'#0000ff',
 			'#00ffff',
-			'#ffff00',
 			'#ff0000',
 			'#00ff00',
+			'#ffff00',			
 			'#ff00ff',
 			'#888888'];
 		
@@ -51,18 +62,7 @@ var whiteboardController = function ($scope) {
 		context = canvas.getContext('2d');
 
 		canvas.onmousedown = function (e) {
-			var x, y, data;
-
-			data = {
-				Canvas: canvas,
-				Context: context,
-				ToolName: selectedToolName,
-				Color: colorRgb[currentColorNumber],
-				Position: {
-					X: e.clientX,
-					Y: e.clientY}}
-
-			render(data);
+			renderer.Render(createRenderObject(e.clientX, e.clientY));
 		};
 
 	};

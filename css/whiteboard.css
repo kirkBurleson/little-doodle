@@ -3,108 +3,69 @@
 	padding: 0px;
 	}
 
-#mainContent {
-	margin: 5px;
-	width: 522px;
-	height: 680px;
+body {
+	padding: 5px;
+	}
+
+#container {
+	padding: 5px;
+	width: 465px;
 	border-radius: 5px;
 	background-color: rgb(67,142,185);
 	}
 
-#mainContent ul {
-	list-style: none;
-	}
-
-#mainContent li {
-	display: inline;
-	}
-
-#tools div {
-	float: left;
-	margin-right: 5px;
-	margin-left: 5px;
-	border-bottom: 2px solid rgb(67,142,185);
-	}
-
-#tools div:hover {
-	border-bottom: 2px solid white;
-	}
-
 #canvas {
-	margin: 5px;
-	border-radius: 5px;
-	}
-
-#colors {
-	display: block;
-	margin: 5px;
-	}
-
-#colors div:hover {
-	height: 40px;
-	}
-
-#penwidth {
-	float: right;
-	margin-right: 5px;
-	}
-
-#penwidth input {
-	width: 20px;
-	}
-
-.currentTool {
-	border-left: 2px solid black;
-	border-right: 2px solid black;
-	}
-
-.currentColor {
-	height: 20px;
-	margin: 5px;
+	float: left;
 	border-radius: 5px;
 	border: 1px solid black;
 	}
 
-.colorBlock {
+#tools {
 	float: left;
-	margin-right: 5px;
-	width: 20px;
-	height: 20px;
+	width: 60px;
 	border-radius: 5px;
+	border: 1px solid black;
 	}
 
-.color1 {
-	background-color: rgb(0,0,0);
+#options {
+	clear: both;
+	padding: 5px;
+	border-radius: 5px;
+	border: 1px solid black;
 	}
 
-.color2 {
-	background-color: rgb(255,255,255);
+#colors {
+	overflow: auto;
+	padding: 5px;
 	}
 
-.color3 {
-	background-color: rgb(0, 0, 255);
+#colors img {
+	border-radius: 3px;	
 	}
 
-.color4 {
-	background-color: rgb(0, 255, 255);
+#colors img:hover {
+	-webkit-transform:scale(1.5);
+	-moz-transform:scale(1.5);
+	transform:scale(1.5);
 	}
 
-.color5 {
-	background-color: rgb(255, 255, 0);
+#colors span {
+	float: left;
 	}
 
-.color6 {
-	background-color: rgb(255, 0, 0);
+#lineColor {
+	float: right;
+	width: 50px;
+	height: 20px;
 	}
 
-.color7 {
-	background-color: rgb(0, 255, 0);
+#fillColor {
+	float: right;
+	width: 50px;
+	height: 20px;
 	}
 
-.color8 {
-	background-color: rgb(255, 0, 255);
+#penWidth {
+	clear: both;
 	}
 
-.color9 {
-	background-color: rgb(136, 136, 136);
-	}

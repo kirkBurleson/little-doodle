@@ -7,51 +7,45 @@
 	<link href="css/whiteboard.css" rel="stylesheet">
 </head>
 <body data-ng-controller="whiteboardController" data-ng-init="init()">
-  <div id="mainContent">
-
-    <div id="tools">
-      <div data-ng-class="getCurrentToolCss('path')">
-        <img src="images/pencil.png" data-ng-click="selectTool('path')"></div>
-      <div data-ng-class="getCurrentToolCss('text')">
-        <img src="images/text.png" data-ng-click="selectTool('text')"></div>
-      <div data-ng-class="getCurrentToolCss('highlighter')">
-        <img src="images/highlighter.png" data-ng-click="selectTool('highlighter')"></div>
-      <div data-ng-class="getCurrentToolCss('background')">
-        <img src="images/background.png" data-ng-click="selectTool('background')"></div>
-      <div data-ng-class="getCurrentToolCss('square')">
-        <img src="images/square.png" data-ng-click="selectTool('square')"></div>
-      <div data-ng-class="getCurrentToolCss('circle')">
-        <img src="images/circle.png" data-ng-click="selectTool('circle')"></div>
+  <div id="container">
+    <canvas id="canvas" height="350px" width="400px">
+      Your browser does not support the canvas element.
+    </canvas>
+    <div id="tools">      
+      <img src="images/pencil.png" data-ng-click="selectTool('path')">
+      <img src="images/text.png" data-ng-click="selectTool('text')">
+      <img src="images/highlighter.png" data-ng-click="selectTool('highlighter')">
+      <img src="images/background.png" data-ng-click="selectTool('background')">
+      <img src="images/square.png" data-ng-click="selectTool('square')">
+      <img src="images/circle.png" data-ng-click="selectTool('circle')">
     </div>
-    
-    <canvas id="canvas" height="512px" width="512px"></canvas>
-    
-    <br>
-    
-    <div id="pencilOptions" data-ng-show="isToolNameSelected('path')">
-      <div data-ng-class="currentColorCss"></div>    
+    <div id="options" data-ng-show="isToolNameSelected('path')">
       <div id="colors">
-        <div class="colorBlock color1" data-choice data-ng-click="selectColor('1')"></div>
-        <div class="colorBlock color2" data-choice data-ng-click="selectColor('2')"></div>
-        <div class="colorBlock color3" data-choice data-ng-click="selectColor('3')"></div>
-        <div class="colorBlock color4" data-choice data-ng-click="selectColor('4')"></div>
-        <div class="colorBlock color5" data-choice data-ng-click="selectColor('5')"></div>
-        <div class="colorBlock color6" data-choice data-ng-click="selectColor('6')"></div>
-        <div class="colorBlock color7" data-choice data-ng-click="selectColor('7')"></div>
-        <div class="colorBlock color8" data-choice data-ng-click="selectColor('8')"></div>
-        <div class="colorBlock color9" data-choice data-ng-click="selectColor('9')"></div>
-      </div>    
-      <div id="penwidth">
+        <span>
+          <img src="images/colors/black.png" data-ng-click="selectColor('1')">
+          <img src="images/colors/white.png" data-ng-click="selectColor('2')">
+          <img src="images/colors/blue.png" data-ng-click="selectColor('3')">
+          <img src="images/colors/skyblue.png" data-ng-click="selectColor('4')">
+          <img src="images/colors/red.png" data-ng-click="selectColor('5')">
+          <img src="images/colors/green.png" data-ng-click="selectColor('6')">
+          <img src="images/colors/yellow.png" data-ng-click="selectColor('7')">
+          <img src="images/colors/pink.png" data-ng-click="selectColor('8')">
+          <img src="images/colors/gray.png" data-ng-click="selectColor('9')">
+        </span>
+        <div id="lineColor" data-ng-class="currentColorCss"></div>
+        <div id="fillColor" data-ng-class="currentColorCss"></div>
+      </div>
+
+      <!--<div id="penwidth">
         Pen Width
         <input type="text" maxlength="2" data-ng-model="penWidth">
-      </div>
+      </div>-->
     </div>
-
-
   </div>
 
 	<script src="jquery-v2.0.3.min.js"></script>
 	<script src="angular.min.js"></script>  
   <script src="whiteboardController.js"></script>
+  <script src="whiteboardRenderer.js"></script>
 </body>
 </html>
