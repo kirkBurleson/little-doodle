@@ -1,25 +1,65 @@
 var renderer = (function () {
-	var render = function (data) {
-		var rect = data.Canvas.getBoundingClientRect();
+	var canvas,
+			buffer,
+			rect,
+			init,
+			render,
+			addToBuffer;
 
-		switch (data.ToolName) {
-		case 'line':
-			alert('rendering a line');
-			break;
-		case 'path':
-			data.Context.fillStyle = data.Color;
-			data.Context.fillRect(data.Position.X - rect.left, data.Position.Y - rect.top, data.PenWidth, data.PenWidth);
-			break;
-		case 'rect':
-			alert('rendering a rectangle');
-			break;
-		case 'circle':
-			alert('rendering a circle');
-			break;
-		default:
-			alert('unknown tool');
+	buffer = [];
+
+	init = function (canvasElement) {
+		if (canvas === undefined) {
+			canvas = canvasElement;
 		}
 	};
 
-	return { Render: render };
+	render = function () {
+		var i,
+				data;
+
+		if (rect === undefined) {
+			rect = canvas.getBoundingClientRect();
+		}
+
+		if (buffer.length === 0) {
+			console.log('render: buffer is empty');
+			return;
+		}
+
+		for (i = 0; i < buffer.length; i++) {
+			data = buffer[i];
+			switch (data.ToolName) {
+				case 'line':
+					alert('rendering a line');
+					break;
+				case 'path':
+					data.Context.fillStyle = data.Color;
+					data.Context.fillRect(data.Position.X - rect.left, data.Position.Y - rect.top, data.PenWidth, data.PenWidth);
+					break;
+				case 'rectangle':
+					alert('rendering a rectangle');
+					break;
+				case 'circle':
+					alert('rendering a circle');
+					break;
+				default:
+					console.log('render: Unknown tool name');
+			}
+		}
+	};
+
+	addToBuffer = function (data) {
+		if (data === undefined) {
+			console.log('addToBuffer: data is undefined');
+			return; }
+
+		buffer.push(data);
+	};
+
+	return {
+		Render: render,
+		Add: addToBuffer,
+		Initialize: init
+	};
 }());

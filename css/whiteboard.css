@@ -10,6 +10,7 @@ body {
 #container {
 	padding: 5px;
 	width: 465px;
+	overflow: auto;
 	border-radius: 5px;
 	background-color: rgb(67,142,185);
 	}
