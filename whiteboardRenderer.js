@@ -18,10 +18,6 @@ var renderer = (function () {
 		var i,
 				data;
 
-		if (rect === undefined) {
-			rect = canvas.getBoundingClientRect();
-		}
-
 		if (buffer.length === 0) {
 			console.log('render: buffer is empty');
 			return;
@@ -35,7 +31,7 @@ var renderer = (function () {
 					break;
 				case 'path':
 					data.Context.fillStyle = data.Color;
-					data.Context.fillRect(data.Position.X - rect.left, data.Position.Y - rect.top, data.PenWidth, data.PenWidth);
+					data.Context.fillRect(data.Position.X, data.Position.Y, data.PenWidth, data.PenWidth);
 					break;
 				case 'rectangle':
 					alert('rendering a rectangle');

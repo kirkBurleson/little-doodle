@@ -63,9 +63,12 @@ var whiteboardController = function ($scope) {
 		renderer.Initialize(canvas);
 		
 		canvas.onmousedown = function (e) {
-			var data;
+			var data, x, y;
 
-			data = createRenderObject(e.clientX, e.clientY);
+			x = e.pageX - canvas.offsetLeft;
+			y = e.pageY - canvas.offsetTop;
+
+			data = createRenderObject(x, y);
 			renderer.Add(data);
 			renderer.Render();
 		};
