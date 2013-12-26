@@ -23,8 +23,8 @@ var whiteboardController = function ($scope) {
 				var data;
 
 				mouseDown = false;
-				endPos.X = points.x - canvas.offsetLeft;
-				endPos.Y = points.y - canvas.offsetTop;
+				endPos.X = points.x;
+				endPos.Y = points.y;
 				data = createRenderObject();
 
 				transferFrontBufferToBackBuffer();
@@ -54,8 +54,8 @@ var whiteboardController = function ($scope) {
 				var data;
 
 				mouseDown = true;
-				startPos.X = points[0].x - canvas.offsetLeft;
-				startPos.Y = points[0].y - canvas.offsetTop;
+				startPos.X = points[0].x;
+				startPos.Y = points[0].y;
 
 				data = createRenderObject();
 
@@ -124,6 +124,9 @@ var whiteboardController = function ($scope) {
 
 // functions
 	$scope.init = function () {
+		var offsetx,
+				offsety;
+
 		colors = [
 			'blank',
 			'black',
@@ -150,6 +153,10 @@ var whiteboardController = function ($scope) {
 		
 		canvas = document.getElementById('canvas');
 		context = canvas.getContext('2d');
+		// adjust mouse coordinates to pointer tip
+		// '3' may change with css in view
+		offsetx = canvas.offsetLeft - 3;
+		offsety = canvas.offsetTop - 3;
 		backbuffer = [];
 		frontbuffer = [];
 		currentColorNumber = 1;
@@ -159,10 +166,11 @@ var whiteboardController = function ($scope) {
 		endPos = { X: 0, Y: 0 };
 		points = [];
 		
+		
 		canvas.onmousedown = function (e) {
 			points.push({
-				x: e.pageX,
-				y: e.pageY,
+				x: e.pageX - offsetx,
+				y: e.pageY - offsety,
 				color: colors[currentColorNumber]
 			});			
 			handleMouseDown();
@@ -171,8 +179,8 @@ var whiteboardController = function ($scope) {
 		canvas.onmousemove = function (e) {
 			if (mouseDown) {
 				points.push({
-					x: e.pageX,
-					y: e.pageY,
+					x: e.pageX - offsetx,
+					y: e.pageY - offsety,
 					color: colors[currentColorNumber]
 				});
 				handleMouseMove();
