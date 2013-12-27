@@ -8,7 +8,8 @@ var whiteboardController = function ($scope) {
 			backbuffer,
 			frontbuffer,
 			points,
-			currentColorNumber,			
+			currentColorNumber,
+			fillColorNumber,
 			selectedToolName,
 			mouseDown,
 			startPos,
@@ -23,8 +24,8 @@ var whiteboardController = function ($scope) {
 				var data;
 
 				mouseDown = false;
-				endPos.X = points.x;
-				endPos.Y = points.y;
+				//endPos.x = points.x;
+				//endPos.y = points.y;
 				data = createRenderObject();
 
 				transferFrontBufferToBackBuffer();
@@ -35,14 +36,17 @@ var whiteboardController = function ($scope) {
 				startPos.y = 0;
 				endPos.x = 0;
 				endPos.y = 0;
-
-				renderer.Render(backbuffer);
 			},
 
 			handleMouseMove = function () {
-				var data;
+				var data,
+						lastPoint;
 
 				if (mouseDown) {
+					lastPoint = points[points.length - 1];
+					endPos.x = lastPoint.x;
+					endPos.y = lastPoint.y;
+
 					data = createRenderObject();
 
 					frontbuffer.push(data);
@@ -54,8 +58,8 @@ var whiteboardController = function ($scope) {
 				var data;
 
 				mouseDown = true;
-				startPos.X = points[0].x;
-				startPos.Y = points[0].y;
+				startPos.x = points[0].x;
+				startPos.y = points[0].y;
 
 				data = createRenderObject();
 
@@ -76,8 +80,8 @@ var whiteboardController = function ($scope) {
 					case 'rectangle':
 						if (frontbuffer.length > 1) {
 							last = frontbuffer[frontbuffer.length - 1];
-							frontbuffer[0].endPos.X = last.endPos.X;
-							frontbuffer[0].endPos.Y = last.endPos.Y;
+							frontbuffer[0].Width = last.endPos.x;
+							frontbuffer[0].Height = last.endPos.y;
 							backbuffer.push(frontbuffer[0]);	
 						}
 						
@@ -86,7 +90,10 @@ var whiteboardController = function ($scope) {
 			},
 
 			createRenderObject = function () {
-				var data;
+				var data,
+						pointsLength;
+
+				pointsLength = points.length;
 
 				switch (selectedToolName) {
 				case 'path':
@@ -94,9 +101,15 @@ var whiteboardController = function ($scope) {
 						Context: context,
 						Canvas: canvas,
 						ToolName: 'path',
-						PenWidth: $scope.penWidth,
-						Points: points
+						PenWidth: $scope.penWidth
 					};
+
+					// we only want the last two points
+					if (points.length === 1) { // send x, y
+						data.Points = [points];
+					} else { // send last 2 x, y points
+						data.Points = [points[pointsLength - 2], points[pointsLength - 1]];
+					}
 					break;
 
 				case 'rectangle':
@@ -106,10 +119,10 @@ var whiteboardController = function ($scope) {
 						LineColor: colorValue[currentColorNumber],
 						FillColor: colorValue[fillColorNumber],
 						PenWidth: $scope.penWidth,
-						StartX: startPos.X,
-						StartY: startPos.Y,
-						EndX: endPos.X,
-						EndY: endPos.Y,
+						StartX: startPos.x,
+						StartY: startPos.y,
+						Width: endPos.x - startPos.x,
+						Height: endPos.y - startPos.y,
 						FillFlag: $scope.fillTheRectangle
 					};
 				}
@@ -118,14 +131,13 @@ var whiteboardController = function ($scope) {
 			};
 
 // bindings
-	$scope.penWidth = 3;
+	$scope.penWidth = 5;
 	$scope.currentColorCss = 'currentColor black';
 	$scope.fillTheRectangle = false;
 
 // functions
 	$scope.init = function () {
-		var offsetx,
-				offsety;
+		var offset;
 
 		colors = [
 			'blank',
@@ -153,34 +165,34 @@ var whiteboardController = function ($scope) {
 		
 		canvas = document.getElementById('canvas');
 		context = canvas.getContext('2d');
-		// adjust mouse coordinates to pointer tip
-		// '3' may change with css in view
-		offsetx = canvas.offsetLeft - 3;
-		offsety = canvas.offsetTop - 3;
+		offset = 3;  // mouse cursor offset
 		backbuffer = [];
 		frontbuffer = [];
 		currentColorNumber = 1;
+		fillColorNumber = 1;
 		selectedToolName = 'path';
 		mouseDown = false;
-		startPos = { X: 0, Y: 0 };
-		endPos = { X: 0, Y: 0 };
+		startPos = { x: 0, y: 0 };
+		endPos = { x: 0, y: 0 };
 		points = [];
 		
 		
 		canvas.onmousedown = function (e) {
 			points.push({
-				x: e.pageX - offsetx,
-				y: e.pageY - offsety,
+				x: (e.pageX - canvas.offsetLeft) - offset,
+				y: (e.pageY - canvas.offsetTop) - offset,
 				color: colors[currentColorNumber]
 			});			
 			handleMouseDown();
 		};
 
 		canvas.onmousemove = function (e) {
+			var x, y;
+
 			if (mouseDown) {
 				points.push({
-					x: e.pageX - offsetx,
-					y: e.pageY - offsety,
+					x: (e.pageX - canvas.offsetLeft) - offset,
+					y: (e.pageY - canvas.offsetTop) - offset,
 					color: colors[currentColorNumber]
 				});
 				handleMouseMove();
