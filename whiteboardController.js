@@ -24,8 +24,6 @@ var whiteboardController = function ($scope) {
 				var data;
 
 				mouseDown = false;
-				//endPos.x = points.x;
-				//endPos.y = points.y;
 				data = createRenderObject();
 
 				transferFrontBufferToBackBuffer();
@@ -49,6 +47,11 @@ var whiteboardController = function ($scope) {
 
 					data = createRenderObject();
 
+					if (selectedToolName === 'rectangle') {
+						context.clearRect(0, 0, canvas.width, canvas.height);
+						renderer.Render(backbuffer);
+						frontbuffer = [];
+					}
 					frontbuffer.push(data);
 					renderer.Render(frontbuffer);
 				}
@@ -60,38 +63,44 @@ var whiteboardController = function ($scope) {
 				mouseDown = true;
 				startPos.x = points[0].x;
 				startPos.y = points[0].y;
+				endPos.x = startPos.x;
+				endPos.y = startPos.y;
 
 				data = createRenderObject();
+
+				if (selectedToolName === 'rectangle') {
+					context.clearRect(0, 0, canvas.width, canvas.height);
+					renderer.Render(backbuffer);
+				}				
 
 				frontbuffer.push(data);
 				renderer.Render(frontbuffer);
 			},
 
 			transferFrontBufferToBackBuffer = function () {
-				var i, last;
+				var i,
+						last,
+						bufferLength;
 
 				switch (selectedToolName) {
-					case 'path':
-						for (i = 0; i < frontbuffer.length; i++) {
-							backbuffer.push(frontbuffer[i]);
-						}
-						return;
+				case 'path':
+					bufferLength = frontbuffer.length;
+					for (i = 0; i < bufferLength; i++) {
+						backbuffer.push(frontbuffer[i]);
+					}
+					return;
 
-					case 'rectangle':
-						if (frontbuffer.length > 1) {
-							last = frontbuffer[frontbuffer.length - 1];
-							frontbuffer[0].Width = last.endPos.x;
-							frontbuffer[0].Height = last.endPos.y;
-							backbuffer.push(frontbuffer[0]);	
-						}
-						
-						break;
+				case 'rectangle':
+					backbuffer.push(frontbuffer[0]);	
+											
+					break;
 				}
 			},
 
 			createRenderObject = function () {
 				var data,
-						pointsLength;
+						pointsLength,
+						addPositionData;
 
 				pointsLength = points.length;
 
@@ -105,11 +114,12 @@ var whiteboardController = function ($scope) {
 					};
 
 					// we only want the last two points
-					if (points.length === 1) { // send x, y
+					if (points.length === 1) {
 						data.Points = [points];
-					} else { // send last 2 x, y points
+					} else {
 						data.Points = [points[pointsLength - 2], points[pointsLength - 1]];
 					}
+
 					break;
 
 				case 'rectangle':
@@ -131,9 +141,9 @@ var whiteboardController = function ($scope) {
 			};
 
 // bindings
-	$scope.penWidth = 5;
+	$scope.penWidth = 3;
 	$scope.currentColorCss = 'currentColor black';
-	$scope.fillTheRectangle = false;
+	$scope.fillTheRectangle = true;
 
 // functions
 	$scope.init = function () {
@@ -165,7 +175,7 @@ var whiteboardController = function ($scope) {
 		
 		canvas = document.getElementById('canvas');
 		context = canvas.getContext('2d');
-		offset = 3;  // mouse cursor offset
+		offset = 5;  // mouse cursor offset
 		backbuffer = [];
 		frontbuffer = [];
 		currentColorNumber = 1;
@@ -187,14 +197,26 @@ var whiteboardController = function ($scope) {
 		};
 
 		canvas.onmousemove = function (e) {
-			var x, y;
+			var x, y, lastPoint;
 
 			if (mouseDown) {
+				x = (e.pageX - canvas.offsetLeft) - offset;
+				y = (e.pageY - canvas.offsetTop) - offset;
+
+				// don't process the same coordinates more than once
+				// if (points.length > 0) {
+				// 	lastPoint = points[points.length - 1]
+				// 	if (lastPoint.x === x && lastPoint.y === y) {
+				// 		return;
+				// 	}
+				// }
+
 				points.push({
-					x: (e.pageX - canvas.offsetLeft) - offset,
-					y: (e.pageY - canvas.offsetTop) - offset,
+					x: x,
+					y: y,
 					color: colors[currentColorNumber]
 				});
+
 				handleMouseMove();
 			}			
 		};
