@@ -13,48 +13,40 @@ var renderer = (function () {
 
 			switch (data.ToolName) {
 
-			case 'line':
-				alert('rendering a line');
-				break;
-
-			case 'path':
-				
-
-				if (data.Points.length === 1) {
+				case 'pencil':
 					data.Context.beginPath();
-					data.Context.fillStyle = data.Points.color;
-					data.Context.fillRect(data.Points.x, data.Points.y, data.PenWidth, data.PenWidth);
-				} else {
-					data.Context.beginPath();
+					data.Context.fillStyle = data.Points[0].color;
+					data.Context.lineCap = 'round';
 					data.Context.strokeStyle = data.Points[0].color;
-					data.Context.lineWidth = data.PenWidth;
-					data.Context.moveTo(data.Points[0].x, data.Points[0].y);
-					data.Context.lineTo(data.Points[1].x, data.Points[1].y);
-					data.Context.stroke();
-				}
-				break;
+					data.Context.lineWidth = data.LineWidth;
 
-			case 'rectangle':
-				data.Context.beginPath();
-				data.Context.strokeStyle = data.LineColor;
-				data.Context.fillStyle = data.FillColor;
-				data.Context.lineWidth = data.PenWidth;
-				data.Context.rect(data.StartX, data.StartY, data.Width, data.Height);
-				
-				if (data.FillFlag) {
-					data.Context.fill();
-				} else {
-					data.Context.stroke();
-				}
+					if (data.Points.length === 1) {					
+						data.Context.rect(data.Points.x, data.Points.y, data.PenWidth, data.PenWidth);
+						data.Context.fill();
+					} else {
+						data.Context.moveTo(data.Points[0].x, data.Points[0].y);
+						data.Context.lineTo(data.Points[1].x, data.Points[1].y);
+						data.Context.stroke();
+					}
+					break;
 
-				break;
+				case 'rectangle':
+					data.Context.beginPath();
+					data.Context.strokeStyle = data.LineColor;
+					data.Context.fillStyle = data.FillColor;
+					data.Context.lineWidth = data.LineWidth;
+					data.Context.rect(data.StartX, data.StartY, data.Width, data.Height);
+					
+					if (data.FillFlag) {
+						data.Context.fill();
+					} else {
+						data.Context.stroke();
+					}
 
-			case 'circle':
-				alert('rendering a circle');
-				break;
+					break;
 
-			default:
-				console.log('render: Unknown tool name');
+				default:
+					console.log('render: Unknown tool name');
 			}
 		}
 	};

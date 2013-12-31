@@ -9,34 +9,40 @@ body {
 
 #container {
 	padding: 5px;
-	width: 582px;
+	width: 514px;
 	overflow: auto;
 	border-radius: 5px;
 	background-color: rgb(67,142,185);
 	}
 
 #canvas {
-	float: left;
-	border-radius: 5px;
-	}
-
-#tools {
-	float: left;
-	width: 60px;
 	border-radius: 5px;
 	border: 1px solid black;
 	}
 
-#options {
-	clear: both;
+#tools {
+	padding: 5px;
+	border-radius: 5px;
+	border: 1px solid black;
+	}
+
+#tools span {
+	margin-right: 10px;
+	}
+
+#drawOptions {
+	overflow: auto;
 	padding: 5px;
 	border-radius: 5px;
 	border: 1px solid black;
 	}
 
 #colors {
+	width: auto;
+	float: left;
 	overflow: auto;
 	padding: 5px;
+	border: 1px solid black;
 	}
 
 #colors img {
@@ -49,23 +55,16 @@ body {
 	transform:scale(1.5);
 	}
 
-#colors span {
-	float: left;
-	}
-
-#lineColor {
+#lineWidth {
+	width: 15%;
 	float: right;
-	width: 50px;
-	height: 20px;
+	padding: 5px;
+	text-align: center;
+	border: 1px solid black;
 	}
 
-#fillColor {
-	float: right;
-	width: 50px;
-	height: 20px;
-	}
-
-#penWidth {
-	clear: both;
+#lineWidth input {
+	margin-left: 3px;
+	margin-right: 3px;
 	}
 
