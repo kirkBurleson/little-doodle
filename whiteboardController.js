@@ -8,7 +8,7 @@ var whiteboardController = function ($scope) {
 			backbuffer,
 			frontbuffer,
 			points,
-			currentColorNumber,
+			lineColorNumber,
 			fillColorNumber,
 			mouseDown,
 			startPos,
@@ -37,8 +37,7 @@ var whiteboardController = function ($scope) {
 
 			createRenderObject = function () {
 				var data,
-						pointsLength,
-						addPositionData;
+						pointsLength;
 
 				pointsLength = points.length;
 
@@ -62,14 +61,14 @@ var whiteboardController = function ($scope) {
 						data = {
 							Context: context,
 							ToolName: 'rectangle',
-							LineColor: colorValue[currentColorNumber],
+							LineColor: colorValue[lineColorNumber],
 							FillColor: colorValue[fillColorNumber],
 							LineWidth: $scope.LineWidth,
 							StartX: startPos.x,
 							StartY: startPos.y,
 							Width: endPos.x - startPos.x,
 							Height: endPos.y - startPos.y,
-							FillFlag: $scope.fillTheRectangle
+							FillShape: $scope.fillShape
 						};
 						break;
 
@@ -86,8 +85,10 @@ var whiteboardController = function ($scope) {
 	$scope.lineWidth = 5;
 	$scope.lineText = "medium";
 	$scope.tool = "pencil";
-	$scope.currentColorCss = "currentColor black";
-	$scope.fillTheRectangle = true;
+	$scope.lineColorCss = "black";
+	$scope.fillColorCss = "black";
+	$scope.fillShape = false;
+	$scope.colorTarget = "line";
 
 // functions
 	$scope.init = function () {
@@ -122,7 +123,7 @@ var whiteboardController = function ($scope) {
 		offset = 5;  // mouse cursor offset
 		backbuffer = [];
 		frontbuffer = [];
-		currentColorNumber = 1;
+		lineColorNumber = 1;
 		fillColorNumber = 1;
 		mouseDown = false;
 		startPos = { x: 0, y: 0 };
@@ -136,7 +137,7 @@ var whiteboardController = function ($scope) {
 			points.push({
 				x: (e.pageX - canvas.offsetLeft) - offset,
 				y: (e.pageY - canvas.offsetTop) - offset,
-				color: colors[currentColorNumber]
+				color: colors[lineColorNumber]
 			});			
 
 			mouseDown = true;
@@ -167,7 +168,7 @@ var whiteboardController = function ($scope) {
 				points.push({
 					x: x,
 					y: y,
-					color: colors[currentColorNumber]
+					color: colors[lineColorNumber]
 				});
 				
 				lastPoint = points[points.length - 1];
@@ -200,18 +201,31 @@ var whiteboardController = function ($scope) {
 				startPos.y = 0;
 				endPos.x = 0;
 				endPos.y = 0;
+
 		};
 
 	};
 
 	$scope.selectColor = function (color) {
-		currentColorNumber = color;
-		$scope.currentColorCss = "currentColor " + colors[currentColorNumber];
+		switch ($scope.colorTarget) {
+			case "line":
+				lineColorNumber = color;
+				$scope.lineColorCss = colors[lineColorNumber];
+				break;
+			case "fill":
+				fillColorNumber = color;
+				$scope.fillColorCss = colors[fillColorNumber];
+				break;
+			default:
+				console.error("selectColor: unknown color");
+		}		
 	};
 
 	$scope.isToolNameSelected = function () {
-		for (var tool in args) {
-			if (tool === $scope.tool) {
+		var i;
+
+		for (i = 0; i < arguments.length; i++) {
+			if (arguments[i] === $scope.tool) {
 				return true;
 			}
 		}
@@ -222,5 +236,11 @@ var whiteboardController = function ($scope) {
 	$scope.changeLineWidth = function (size) {
 		$scope.lineWidth = size;
 	};
+
+	$scope.changeColorTarget = function (target) {
+		$scope.colorTarget = target;
+	};
+
+
 
 };

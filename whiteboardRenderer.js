@@ -26,7 +26,7 @@ var renderer = (function () {
 					} else {
 						data.Context.moveTo(data.Points[0].x, data.Points[0].y);
 						data.Context.lineTo(data.Points[1].x, data.Points[1].y);
-						data.Context.stroke();
+						data.Context.stroke();						
 					}
 					break;
 
@@ -37,12 +37,12 @@ var renderer = (function () {
 					data.Context.lineWidth = data.LineWidth;
 					data.Context.rect(data.StartX, data.StartY, data.Width, data.Height);
 					
-					if (data.FillFlag) {
+					if (data.FillShape) {
 						data.Context.fill();
-					} else {
-						data.Context.stroke();
 					}
-
+					
+					data.Context.stroke();
+					
 					break;
 
 				default:

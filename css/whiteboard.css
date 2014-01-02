@@ -34,13 +34,13 @@ body {
 	overflow: auto;
 	padding: 5px;
 	border-radius: 5px;
-	border: 1px solid black;
+	border: 1px solid white;
 	}
 
 #colors {
-	width: auto;
 	float: left;
 	overflow: auto;
+	width: auto;
 	padding: 5px;
 	border: 1px solid black;
 	}
@@ -49,7 +49,7 @@ body {
 	border-radius: 3px;	
 	}
 
-#colors img:hover {
+#colors > img:hover {
 	-webkit-transform:scale(1.5);
 	-moz-transform:scale(1.5);
 	transform:scale(1.5);
@@ -58,7 +58,6 @@ body {
 #lineWidth {
 	width: 15%;
 	float: right;
-	padding: 5px;
 	text-align: center;
 	border: 1px solid black;
 	}
@@ -68,3 +67,61 @@ body {
 	margin-right: 3px;
 	}
 
+#colorTarget {
+	float: left;
+	padding: 5px;
+	border: 1px solid black;
+	}
+
+#colorTarget div {
+	width: 40px;
+	height: 20px;
+	float: left;
+	border-radius: 3px;
+	border: 1px solid black;
+	}
+#colorTarget div:first-child {
+	margin-right: 5px;
+	}
+
+#fillOptions {
+	clear: both;
+	float: left;
+	border: 1px solid black;
+	}
+
+.black {
+	background-color: #000000;
+	}
+
+.white {
+	background-color: #ffffff;
+	}
+
+.blue {
+	background-color: #0000ff;
+	}
+
+.skyblue {
+	background-color: #00ffff;
+	}
+
+.red {
+	background-color: #ff0000;
+	}
+
+.green {
+	background-color: #00ff00;
+	}
+
+.yellow {
+	background-color: #ffff00;
+	}
+
+.pink {
+	background-color: #ff00ff;
+	}
+
+.gray {
+	background-color: #888888;
+	}
