@@ -15,18 +15,18 @@ var renderer = (function () {
 			switch (data.ToolName) {
 
 				case 'pencil':
-					data.Context.beginPath();
-					data.Context.fillStyle = data.Points[0].color;
+					data.Context.beginPath();					
 					data.Context.lineCap = 'round';
-					data.Context.strokeStyle = data.Points[0].color;
-					data.Context.lineWidth = data.LineWidth;
 
-					if (data.Points.length === 1) {					
-						data.Context.rect(data.Points.x, data.Points.y, data.PenWidth, data.PenWidth);
+					if (data.Points.length === 1) {
+						data.Context.fillStyle = data.Points[0].color;
+						data.Context.rect(data.Points[0].x, data.Points[0].y, data.LineWidth, data.LineWidth);
 						data.Context.fill();
 					} else {
 						data.Context.moveTo(data.Points[0].x, data.Points[0].y);
 						data.Context.lineTo(data.Points[1].x, data.Points[1].y);
+						data.Context.strokeStyle = data.Points[0].color;
+						data.Context.lineWidth = data.LineWidth;
 						data.Context.stroke();						
 					}
 					break;
