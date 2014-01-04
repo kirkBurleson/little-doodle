@@ -54,6 +54,20 @@ var renderer = (function () {
 					data.Context.stroke();					
 					break;
 
+				case "circle":
+					data.Context.beginPath();
+					data.Context.strokeStyle = data.LineColor;
+					data.Context.fillStyle = data.FillColor;
+					data.Context.lineWidth = data.LineWidth;
+					data.Context.arc(data.StartX, data.StartY, data.Radius, 0, Math.PI * 2, false);
+
+					if (data.FillShape) {
+						data.Context.fill();
+					}
+
+					data.Context.stroke();
+					break;
+
 				default:
 					console.log('render: Unknown tool name');
 			}

@@ -29,12 +29,10 @@ var whiteboardController = function ($scope) {
 						}
 						return;
 
+					case 'circle':
+					case 'line':
 					case 'rectangle':
 						backbuffer.push(frontbuffer[0]);												
-						break;
-
-					case 'line':
-						backbuffer.push(frontbuffer[frontbuffer.length - 1]);
 						break;
 
 				}
@@ -86,6 +84,20 @@ var whiteboardController = function ($scope) {
 							StartY: startPos.y,
 							Width: endPos.x - startPos.x,
 							Height: endPos.y - startPos.y,
+							FillShape: $scope.fillShape
+						};
+						break;
+
+					case 'circle':
+						data = {
+							Context: context,
+							ToolName: 'circle',
+							LineColor: colorValue[lineColorNumber],
+							FillColor: colorValue[fillColorNumber],
+							LineWidth: $scope.lineWidth,
+							StartX: startPos.x,
+							StartY: startPos.y,
+							Radius: (Math.abs(endPos.x - startPos.x) + (Math.abs(endPos.y - startPos.y)) / 2),
 							FillShape: $scope.fillShape
 						};
 						break;
@@ -166,7 +178,9 @@ var whiteboardController = function ($scope) {
 
 			data = createRenderObject();
 
-			if ($scope.tool === "rectangle" || $scope.tool === "line") {
+			if ($scope.tool === "rectangle" ||
+					$scope.tool === "line" ||
+					$scope.tool === "circle") {
 				context.clearRect(0, 0, canvas.width, canvas.height);
 				renderer.Render(backbuffer);
 			}				
@@ -194,7 +208,9 @@ var whiteboardController = function ($scope) {
 
 				data = createRenderObject();
 
-				if ($scope.tool === "rectangle" || $scope.tool === "line") {
+				if ($scope.tool === "rectangle" ||
+						$scope.tool === "line" ||
+						$scope.tool === "circle") {
 					context.clearRect(0, 0, canvas.width, canvas.height);
 					renderer.Render(backbuffer);
 					frontbuffer = [];
