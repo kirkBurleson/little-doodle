@@ -18,7 +18,7 @@
       <span><input type="radio" name="tool" value="line" data-ng-model="tool"> Line</span>
       <span><input type="radio" name="tool" value="rectangle" data-ng-model="tool"> Rectangle</span>
       <span><input type="radio" name="tool" value="circle" data-ng-model="tool"> Circle</span>
-      <span><input type="radio" name="tool" value="background" data-ng-model="tool"> Background</span>
+      <div><button data-ng-click="undo()">Undo</button></div>
     </div>
 
     <div id="drawOptions" data-ng-show="isToolNameSelected('pencil', 'rectangle', 'line', 'circle')">
@@ -37,6 +37,8 @@
       <div id="colorTarget">
         <div title="Line color" data-ng-class="lineColorCss" data-ng-click="changeColorTarget('line')"></div>
         <div title="Fill color" data-ng-class="fillColorCss" data-ng-click="changeColorTarget('fill')"></div>
+        <br>
+        <span>Line <span>Fill<span></span>
       </div>
 
       <div id="lineWidth">

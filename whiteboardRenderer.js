@@ -5,6 +5,7 @@ var renderer = (function () {
 				data;
 
 		if (buffer.length === 0) {
+			console.log("renderer: buffer is empty");
 			return;
 		}
 

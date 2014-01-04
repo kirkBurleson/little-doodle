@@ -182,7 +182,9 @@ var whiteboardController = function ($scope) {
 					$scope.tool === "line" ||
 					$scope.tool === "circle") {
 				context.clearRect(0, 0, canvas.width, canvas.height);
-				renderer.Render(backbuffer);
+				if (backbuffer.length > 0) {
+					renderer.Render(backbuffer);
+				}
 			}				
 
 			frontbuffer.push(data);
@@ -212,8 +214,10 @@ var whiteboardController = function ($scope) {
 						$scope.tool === "line" ||
 						$scope.tool === "circle") {
 					context.clearRect(0, 0, canvas.width, canvas.height);
-					renderer.Render(backbuffer);
 					frontbuffer = [];
+					if (backbuffer.length > 0) {
+						renderer.Render(backbuffer);
+					}					
 				}
 				frontbuffer.push(data);
 				renderer.Render(frontbuffer);
@@ -276,6 +280,17 @@ var whiteboardController = function ($scope) {
 		$scope.colorTarget = target;
 	};
 
+	$scope.undo = function () {
+		backbuffer.pop();
+		frontbuffer = [];
+		points = [];
+		startPos.x = 0;
+		startPos.y = 0;
+		endPos.x = 0;
+		endPos.y = 0;
 
+		context.clearRect(0, 0, canvas.width, canvas.height);
+		renderer.Render(backbuffer);
+	};
 
 };

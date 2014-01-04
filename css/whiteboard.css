@@ -17,24 +17,24 @@ body {
 
 #canvas {
 	border-radius: 5px;
-	border: 1px solid black;
 	}
 
 #tools {
 	padding: 5px;
-	border-radius: 5px;
-	border: 1px solid black;
+	border-top: 1px solid white;
 	}
 
 #tools span {
 	margin-right: 10px;
 	}
 
+#tools div {
+	float: right;
+	}
+
 #drawOptions {
 	overflow: auto;
 	padding: 5px;
-	border-radius: 5px;
-	border: 1px solid white;
 	}
 
 #colors {
@@ -42,7 +42,6 @@ body {
 	overflow: auto;
 	width: auto;
 	padding: 5px;
-	border: 1px solid black;
 	}
 
 #colors img {
@@ -59,7 +58,6 @@ body {
 	width: 15%;
 	float: right;
 	text-align: center;
-	border: 1px solid black;
 	}
 
 #lineWidth input {
@@ -70,7 +68,6 @@ body {
 #colorTarget {
 	float: left;
 	padding: 5px;
-	border: 1px solid black;
 	}
 
 #colorTarget div {
@@ -78,16 +75,22 @@ body {
 	height: 20px;
 	float: left;
 	border-radius: 3px;
-	border: 1px solid black;
 	}
 #colorTarget div:first-child {
 	margin-right: 5px;
 	}
 
+#colorTarget span {
+	margin-left: 8px;
+	}
+
+#colorTarget span span {
+	margin-left: 15px;
+	}
+
 #fillOptions {
 	clear: both;
 	float: left;
-	border: 1px solid black;
 	}
 
 .black {
