@@ -21,7 +21,7 @@
       <span><input type="radio" name="tool" value="background" data-ng-model="tool"> Background</span>
     </div>
 
-    <div id="drawOptions" data-ng-show="isToolNameSelected('pencil', 'rectangle')">
+    <div id="drawOptions" data-ng-show="isToolNameSelected('pencil', 'rectangle', 'line')">
       <div id="colors">          
         <img src="images/colors/black.png" data-ng-click="selectColor('1')">
         <img src="images/colors/white.png" data-ng-click="selectColor('2')">
@@ -46,7 +46,7 @@
         {{lineText}}
       </div>
 
-      <div id="fillOptions" data-ng-show="isToolNameSelected('rectangle')">
+      <div id="fillOptions" data-ng-show="isToolNameSelected('rectangle', 'circle')">
         Fill shape?
         <input type="checkbox" data-ng-model="fillShape">
       </div>

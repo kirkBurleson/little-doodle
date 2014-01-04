@@ -30,19 +30,28 @@ var renderer = (function () {
 					}
 					break;
 
+				case 'line':
+					data.Context.beginPath();
+					data.Context.strokeStyle = data.LineColor;
+					data.Context.lineWidth = data.LineWidth;
+					data.Context.lineCap = 'round';
+					data.Context.moveTo(data.StartX, data.StartY);
+					data.Context.lineTo(data.EndX, data.EndY);
+					data.Context.stroke();
+					break;
+
 				case 'rectangle':
 					data.Context.beginPath();
 					data.Context.strokeStyle = data.LineColor;
 					data.Context.fillStyle = data.FillColor;
 					data.Context.lineWidth = data.LineWidth;
 					data.Context.rect(data.StartX, data.StartY, data.Width, data.Height);
-					
+
 					if (data.FillShape) {
 						data.Context.fill();
 					}
 					
-					data.Context.stroke();
-					
+					data.Context.stroke();					
 					break;
 
 				default:
