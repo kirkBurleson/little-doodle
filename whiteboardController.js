@@ -1,41 +1,26 @@
-'use strict';
-
-var whiteboardController = function ($scope) {
+var wb = angular.module("wb", []);
+wb.controller("whiteboardController", function ($scope, wbRenderer) {
+	'use strict';
 	var colors,
 			colorValue,
 			canvas,
 			context,
-			backbuffer,
-			frontbuffer,
 			points,
 			lineColorNumber,
 			fillColorNumber,
 			mouseDown,
 			startPos,
 			endPos,
-			transferFrontBufferToBackBuffer,
 			createRenderObject,
+			renderPath,
+			backgroundImage,
 
-			transferFrontBufferToBackBuffer = function () {
-				var i,
-						last,
-						bufferLength;
-
-				switch ($scope.tool) {
-					case 'pencil':
-						bufferLength = frontbuffer.length;
-						for (i = 0; i < bufferLength; i++) {
-							backbuffer.push(frontbuffer[i]);
-						}
-						return;
-
-					case 'circle':
-					case 'line':
-					case 'rectangle':
-						backbuffer.push(frontbuffer[0]);												
-						break;
-
+			renderPath = function (data) {
+				if ($scope.tool === "rectangle" || $scope.tool === "line" || $scope.tool === "circle") {
+					wbRenderer.renderAll();
 				}
+
+				wbRenderer.render(data);
 			},
 
 			createRenderObject = function () {
@@ -45,25 +30,18 @@ var whiteboardController = function ($scope) {
 				pointsLength = points.length;
 
 				switch ($scope.tool) {
-					case 'pencil':
+					case "pencil":
 						data = {
-							Context: context,
-							ToolName: 'pencil',
-							LineWidth: $scope.lineWidth
+							ToolName: "pencil",
+							LineWidth: $scope.lineWidth,
+							Points: points,
+							Color: colorValue[lineColorNumber]
 						};
-
-						// we only want the last two points
-						if (pointsLength === 1) {
-							data.Points = [points];
-						} else {
-							data.Points = [points[pointsLength - 2], points[pointsLength - 1]];
-						}
 						break;
 
-					case 'line':
+					case "line":
 						data = {
-							Context: context,
-							ToolName: 'line',
+							ToolName: "line",
 							LineColor: colorValue[lineColorNumber],
 							LineWidth: $scope.lineWidth,
 							StartX: startPos.x,
@@ -73,10 +51,9 @@ var whiteboardController = function ($scope) {
 						};
 						break;
 
-					case 'rectangle':
+					case "rectangle":
 						data = {
-							Context: context,
-							ToolName: 'rectangle',
+							ToolName: "rectangle",
 							LineColor: colorValue[lineColorNumber],
 							FillColor: colorValue[fillColorNumber],
 							LineWidth: $scope.lineWidth,
@@ -88,10 +65,9 @@ var whiteboardController = function ($scope) {
 						};
 						break;
 
-					case 'circle':
+					case "circle":
 						data = {
-							Context: context,
-							ToolName: 'circle',
+							ToolName: "circle",
 							LineColor: colorValue[lineColorNumber],
 							FillColor: colorValue[fillColorNumber],
 							LineWidth: $scope.lineWidth,
@@ -150,9 +126,8 @@ var whiteboardController = function ($scope) {
 		
 		canvas = document.getElementById("canvas");
 		context = canvas.getContext("2d");
+		wbRenderer.setContext(context);
 		offset = 5;  // mouse cursor offset
-		backbuffer = [];
-		frontbuffer = [];
 		points = [];
 		lineColorNumber = 1;
 		fillColorNumber = 1;
@@ -166,29 +141,18 @@ var whiteboardController = function ($scope) {
 			points.push({
 				x: (e.pageX - canvas.offsetLeft) - offset,
 				y: (e.pageY - canvas.offsetTop) - offset,
-				color: colors[lineColorNumber]
+				color: colorValue[lineColorNumber]
 			});			
 
 			mouseDown = true;
 
 			startPos.x = points[0].x;
 			startPos.y = points[0].y;
-			endPos.x = startPos.x;
-			endPos.y = startPos.y;
+			endPos.x = points[0].x;
+			endPos.y = points[0].y;
 
 			data = createRenderObject();
-
-			if ($scope.tool === "rectangle" ||
-					$scope.tool === "line" ||
-					$scope.tool === "circle") {
-				context.clearRect(0, 0, canvas.width, canvas.height);
-				if (backbuffer.length > 0) {
-					renderer.Render(backbuffer);
-				}
-			}				
-
-			frontbuffer.push(data);
-			renderer.Render(frontbuffer);
+			renderPath(data);
 		};
 
 		canvas.onmousemove = function (e) {
@@ -201,7 +165,7 @@ var whiteboardController = function ($scope) {
 				points.push({
 					x: x,
 					y: y,
-					color: colors[lineColorNumber]
+					color: colorValue[lineColorNumber]
 				});
 				
 				lastPoint = points[points.length - 1];
@@ -209,38 +173,23 @@ var whiteboardController = function ($scope) {
 				endPos.y = lastPoint.y;
 
 				data = createRenderObject();
-
-				if ($scope.tool === "rectangle" ||
-						$scope.tool === "line" ||
-						$scope.tool === "circle") {
-					context.clearRect(0, 0, canvas.width, canvas.height);
-					frontbuffer = [];
-					if (backbuffer.length > 0) {
-						renderer.Render(backbuffer);
-					}					
-				}
-				frontbuffer.push(data);
-				renderer.Render(frontbuffer);
+				renderPath(data);				
 			}			
 		};
 
 		canvas.onmouseup = function (e) {
 			var data;
 
-				mouseDown = false;
-				data = createRenderObject();
+			mouseDown = false;
+			data = createRenderObject();
+			wbRenderer.addToBuffer(data);
 
-				transferFrontBufferToBackBuffer();
-
-				frontbuffer = [];
-				points = [];
-				startPos.x = 0;
-				startPos.y = 0;
-				endPos.x = 0;
-				endPos.y = 0;
-
+			points = [];
+			startPos.x = 0;
+			startPos.y = 0;
+			endPos.x = 0;
+			endPos.y = 0;
 		};
-
 	};
 
 	$scope.selectColor = function (color) {
@@ -281,16 +230,13 @@ var whiteboardController = function ($scope) {
 	};
 
 	$scope.undo = function () {
-		backbuffer.pop();
-		frontbuffer = [];
+		wbRenderer.undo();
+		wbRenderer.renderAll();
+
 		points = [];
 		startPos.x = 0;
 		startPos.y = 0;
 		endPos.x = 0;
 		endPos.y = 0;
-
-		context.clearRect(0, 0, canvas.width, canvas.height);
-		renderer.Render(backbuffer);
 	};
-
-};
+});

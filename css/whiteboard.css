@@ -93,6 +93,11 @@ body {
 	float: left;
 	}
 
+#imageOptions {
+	clear: both;
+	float: left;
+	}
+
 .black {
 	background-color: #000000;
 	}

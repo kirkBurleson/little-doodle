@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html data-ng-app>
+<html data-ng-app="wb">
 <head lang="en">
 	<meta charset="utf-8">
-	<title>Whiteboard v1.0</title>
+	<title>Whiteboard v1.1</title>
 
 	<link href="css/whiteboard.css" rel="stylesheet">
 </head>
@@ -18,11 +18,12 @@
       <span><input type="radio" name="tool" value="line" data-ng-model="tool"> Line</span>
       <span><input type="radio" name="tool" value="rectangle" data-ng-model="tool"> Rectangle</span>
       <span><input type="radio" name="tool" value="circle" data-ng-model="tool"> Circle</span>
+      <span><input type="radio" name="tool" value="image" data-ng-model="tool"> Image</span>
       <div><button data-ng-click="undo()">Undo</button></div>
     </div>
 
-    <div id="drawOptions" data-ng-show="isToolNameSelected('pencil', 'rectangle', 'line', 'circle')">
-      <div id="colors">          
+    <div id="drawOptions">
+      <div id="colors" data-ng-hide="isToolNameSelected('image')">          
         <img src="images/colors/black.png" data-ng-click="selectColor('1')">
         <img src="images/colors/white.png" data-ng-click="selectColor('2')">
         <img src="images/colors/blue.png" data-ng-click="selectColor('3')">
@@ -34,14 +35,14 @@
         <img src="images/colors/gray.png" data-ng-click="selectColor('9')">        
       </div>
 
-      <div id="colorTarget">
+      <div id="colorTarget" data-ng-hide="isToolNameSelected('image')">
         <div title="Line color" data-ng-class="lineColorCss" data-ng-click="changeColorTarget('line')"></div>
         <div title="Fill color" data-ng-class="fillColorCss" data-ng-click="changeColorTarget('fill')"></div>
         <br>
         <span>Line <span>Fill<span></span>
       </div>
 
-      <div id="lineWidth">
+      <div id="lineWidth" data-ng-hide="isToolNameSelected('image')">
         <input type="radio" name="lineWidth" value="small" title="small" data-ng-model="lineText" data-ng-click="changeLineWidth('3')">
         <input type="radio" name="lineWidth" value="medium" checked title="medium" data-ng-model="lineText" data-ng-click="changeLineWidth('5')">
         <input type="radio" name="lineWidth" value="large" title="large" data-ng-model="lineText" data-ng-click="changeLineWidth('10')">
@@ -53,12 +54,16 @@
         <input type="checkbox" data-ng-model="fillShape">
       </div>
 
+      <div id="imageOptions" data-ng-show="isToolNameSelected('image')">
+        <input id="inpImage" type="file">
+      </div>
+
     </div>
   </div>
 
 	
 	<script src="angular.min.js"></script>  
   <script src="whiteboardController.js"></script>
-  <script src="whiteboardRenderer.js"></script>
+  <script src="whiteboardRendererFactory.js"></script>
 </body>
 </html>
