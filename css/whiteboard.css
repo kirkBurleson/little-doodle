@@ -60,11 +60,6 @@ body {
 	text-align: center;
 	}
 
-#lineWidth input {
-	margin-left: 3px;
-	margin-right: 3px;
-	}
-
 #colorTarget {
 	float: left;
 	padding: 5px;
